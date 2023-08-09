@@ -21,7 +21,11 @@ def register_user(request):
 
     UserProfile.objects.create(user=user, bio=bio)
 
-    return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
+    payload = jwt_payload_handler(user)
+    token = jwt_encode_handler(payload)
+
+    return Response({'message': 'User registered successfully.', 'token': token}, status=status.HTTP_201_CREATED)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
